@@ -1,0 +1,166 @@
+<%--
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+--%>
+
+<!-- BEGIN RIVET LOGIC CODE -->
+<%@page import="com.liferay.portal.model.LayoutConstants"%>
+<%@page import="com.liferay.portal.model.GroupConstants"%>
+<%@page import="com.liferay.portal.service.GroupLocalServiceUtil"%>
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
+<%@page import="java.util.Map"%>
+<%@page import="javax.portlet.PortletPreferences"%>
+<%@page import="com.liferay.portal.theme.ThemeDisplay"%>
+<%@page import="com.liferay.portal.util.PortletKeys"%>
+<%@page import="com.liferay.portal.service.PortletPreferencesLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Portlet"%>
+<%@page import="com.liferay.portal.service.PortletLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
+
+<%
+	String key;
+	String keyWord = "";
+	String KEY_WORD = "key_word";
+	String jsResultMap = "{";
+	String jsResultArray = "[";
+	long plidCP = 0;
+	long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
+	int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
+	long companyId = themeDisplay.getCompanyId();
+	String portletId = "voicecommands_WAR_voicecommandsportlet";
+
+	try {
+		Group groupTemp = GroupLocalServiceUtil.getGroup(companyId, GroupConstants.CONTROL_PANEL);
+		List<Layout> layoutList = LayoutLocalServiceUtil.getLayouts(groupTemp.getGroupId(), true, LayoutConstants.TYPE_CONTROL_PANEL);
+		if(layouts != null && !layoutList.isEmpty()) {
+			plidCP = layoutList.get(0).getPlid(); 
+		}
+		PortletPreferences prefer = PortletPreferencesLocalServiceUtil.getPreferences(companyId, ownerId, ownerType, plidCP, portletId);
+		if(prefer != null) {
+			keyWord = prefer.getValue(KEY_WORD, StringPool.BLANK);
+			
+			for(Map.Entry<String, String[]> entry : prefer.getMap().entrySet()) {
+				key = entry.getKey().trim();
+				if (!key.isEmpty() && !key.equalsIgnoreCase(KEY_WORD)) {
+					if(jsResultArray.equals("[")) {
+						jsResultArray += "'" + key + "'";
+					} else {
+						jsResultArray += ",'" + key + "'";
+					}
+					if(jsResultMap.equals("{")) {
+						jsResultMap += "'" + key + "':'" + entry.getValue()[0] + "'";
+					} else {
+						jsResultMap += ",'" + key + "':'" + entry.getValue()[0] + "'";
+					}
+				}
+			}
+		}
+		jsResultMap += "}";
+		jsResultArray += "]";
+	} catch (SystemException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (PortalException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+%>
+<!-- END RIVET LOGIC CODE -->
+<aui:nav collapsible="<%= true %>" cssClass='<%= portalMessageUseAnimation ? "nav-account-controls" : "nav-account-controls nav-account-controls-notice" %>' icon="user" id="navAccountControls">
+	<c:if test="<%= userSetupComplete %>">
+		<%@ include file="/html/portlet/dockbar/view_page_customization_bar.jspf" %>
+
+		<c:if test="<%= themeDisplay.isShowStagingIcon() %>">
+			<aui:nav-item cssClass="staging-controls">
+				<liferay-portlet:runtime portletName="<%= PortletKeys.STAGING_BAR %>" />
+			</aui:nav-item>
+		</c:if>
+		<!-- BEGIN RIVET LOGIC CODE -->
+		<aui:nav-item cssClass="speech" dropdown="<%= false %>" id="speech" label="">
+			<button id="start_button">
+				<img id="start_img" src="/voice-commands-hook/image/mic.gif" alt="Start" width="43px">
+			</button>
+		</aui:nav-item>
+		<!-- END RIVET LOGIC CODE -->
+		<%@ include file="/html/portlet/dockbar/view_admin_links.jspf" %>
+
+		<%@ include file="/html/portlet/dockbar/view_my_sites.jspf" %>
+	</c:if>
+
+	<%@ include file="/html/portlet/dockbar/view_user_account.jspf" %>
+</aui:nav>
+
+<!-- BEGIN RIVET LOGIC CODE -->
+<aui:script use="speechrecognition">
+	var speechRecognition;
+	speechRecognition = new A.speechrecognition.SpeechRecognition(
+		{
+			commandsMap: <%= jsResultMap %>,
+			commandsKey: <%= jsResultArray %>,
+			keyWord: '<%= keyWord %>',
+			userSetupComplete: <%= userSetupComplete %>
+		});
+	A.one('.speech :button').on('click', A.speechrecognition.startButton);
+
+</aui:script>
+
+<style>
+  .aui button {
+    background-image: linear-gradient(#118ade 0,#118ade 47%,#1273c7 100%);
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#118ade),color-stop(47%,#118ade),color-stop(100%,#1273c7));
+    border: 0px;
+    color: #fff;
+    padding: 0px;
+  }
+  .aui button :hover {
+    background: #2aaae6!important;
+  }
+  .final {
+    color: black;
+    padding-right: 3px; 
+  }
+  .interim {
+    color: gray;
+  }
+  .results {
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 0px;
+    text-align: left;
+    min-height: 10px;
+    width: 362px;
+    height: 20px;
+    float: right;
+    margin-top: 45px;
+    margin-right: 70px;
+  }
+  .results2 {
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 0px;
+    text-align: left;
+    min-height: 10px;
+    width: 362px;
+    height: 20px;
+    float: right;
+  }
+  #results {
+       opacity: 0;
+  }
+</style>
