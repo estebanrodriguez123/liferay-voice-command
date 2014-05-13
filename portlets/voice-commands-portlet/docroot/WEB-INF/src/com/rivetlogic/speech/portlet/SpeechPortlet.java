@@ -67,6 +67,7 @@ public class SpeechPortlet extends MVCPortlet {
         }
         request.setAttribute(COMMAND_COUNT, commandBeans.size());
         request.setAttribute(COMMAND_LIST, commandBeans);
+        SessionMessages.clear(request);
         super.doView(request, response);
     }
 

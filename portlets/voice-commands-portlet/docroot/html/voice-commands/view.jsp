@@ -23,11 +23,18 @@
 <%
 	List<CommandBean> commandBeans = (List<CommandBean>) request.getAttribute("command_list");
 %>
+
+<portlet:renderURL var="addCommandURL" portletMode="edit">
+    <portlet:param name="mvcPath" value="/html/voice-commands/edit.jsp" />
+</portlet:renderURL>
 <aui:fieldset label="command-list">
-	<liferay-ui:search-container delta="10" emptyResultsMessage="no-commands-were-found">
+	<aui:fieldset>
+		<aui:button type="button" value="&nbsp;Add" cssClass="btn btn-large  btn-primary icon-plus" onClick="<%= addCommandURL %>"/>
+	</aui:fieldset>
+	<liferay-ui:search-container delta="<%= SpeechUtil.NUMBER_OF_ROWS %>" emptyResultsMessage="no-commands-were-found">
 		<liferay-ui:search-container-results 
 			results="<%= SpeechUtil.subList(commandBeans, searchContainer.getStart(), searchContainer.getEnd()) %>" 
-			total="${commandCount}"/>
+			total="${command_count}"/>
 		<liferay-ui:search-container-row className="com.rivetlogic.speech.bean.impl.CommandBeanImpl" modelVar="command">
 			<liferay-ui:search-container-column-text name="command_key" cssClass="command-key-column">
 				${command.commandKey}

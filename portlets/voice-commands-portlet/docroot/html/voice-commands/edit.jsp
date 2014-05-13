@@ -30,22 +30,21 @@ String commandValue = ParamUtil.get(request, "command_value", StringPool.BLANK);
 <!-- ACTION URL -->
 <portlet:actionURL name="addCommandAction" var="addCommandURL"/>
 <portlet:actionURL name="backAction" var="backURL"/>
-
 <!-- FORM -->
 <aui:form action="${addCommandURL}">
 	<aui:fieldset column="true" label="add-command">
-		<aui:input name="key_word" helpMessage="key_word_help_msg" value="<%= keyWord %>">
+		<aui:input name="key_word" title="key_word_help_msg" value="<%= keyWord %>">
 			<aui:validator name="maxLength">
                 	'15'
             </aui:validator>
 		</aui:input>
 		<aui:fieldset column="false">
-			<aui:input name="command_key" required="true" helpMessage="command_key_help_msg" value="<%= commandKey %>">
+			<aui:input name="command_key" required="true" title="command_key_help_msg" value="<%= commandKey %>">
 				<aui:validator name="maxLength">
                 	'35'
             	</aui:validator>
 			</aui:input>
-			<aui:input name="command_value" required="true" helpMessage="command_value_help_msg" value="<%= commandValue %>"/>
+			<aui:input name="command_value" required="true" title="command_value_help_msg" value="<%= commandValue %>"/>
 		</aui:fieldset>
 	</aui:fieldset>
 	<aui:button-row>
@@ -53,4 +52,11 @@ String commandValue = ParamUtil.get(request, "command_value", StringPool.BLANK);
 		<aui:button type="submit" value="Add"/>
 	</aui:button-row>
 </aui:form>
-
+<aui:script use="aui-tooltip">
+    new A.TooltipDelegate(
+      {
+        trigger: '#<portlet:namespace/>fm input[type=text]',
+        position: 'right'
+      }
+    );
+</aui:script>

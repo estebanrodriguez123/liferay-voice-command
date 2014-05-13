@@ -31,4 +31,6 @@ public class SpeechUtil {
             return new ArrayList<CommandBean>();
         }
     }
+    
+    public static final int NUMBER_OF_ROWS = 10;
 }
