@@ -106,16 +106,18 @@
 
 <!-- BEGIN RIVET LOGIC CODE -->
 <aui:script use="speechrecognition">
+	var signedIn = <%= themeDisplay.isSignedIn() %>;
 	var speechRecognition;
-	speechRecognition = new A.speechrecognition.SpeechRecognition(
-		{
-			commandsMap: <%= jsResultMap %>,
-			commandsKey: <%= jsResultArray %>,
-			keyWord: '<%= keyWord %>',
-			userSetupComplete: <%= userSetupComplete %>
-		});
-	A.one('.speech :button').on('click', A.speechrecognition.startButton);
-
+	if(signedIn) {
+		speechRecognition = new A.speechrecognition.SpeechRecognition(
+			{
+				commandsMap: <%= jsResultMap %>,
+				commandsKey: <%= jsResultArray %>,
+				keyWord: '<%= keyWord %>',
+				userSetupComplete: <%= userSetupComplete %>
+			});
+		A.one('.speech :button').on('click', A.speechrecognition.startButton);
+	}
 </aui:script>
 
 <style>

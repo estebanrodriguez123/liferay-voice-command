@@ -4,7 +4,7 @@
 	
 	<portlet>
 		<portlet-name>voice-commands</portlet-name>
-		<display-name>Voice Commands Portlet</display-name>
+		<display-name>Voice Commands</display-name>
 		<portlet-class>
 			com.rivetlogic.speech.portlet.SpeechPortlet
 		</portlet-class>
@@ -24,8 +24,8 @@
 		</supports>
 		<resource-bundle>content/language</resource-bundle>
 		<portlet-info>
-			<title>Voice Commands Portlet</title>
-			<short-title>Voice Commands Portlet</short-title>
+			<title>Voice Commands</title>
+			<short-title>Voice Commands</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>

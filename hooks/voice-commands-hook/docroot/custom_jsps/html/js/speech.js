@@ -147,7 +147,7 @@ AUI().add('speechrecognition', function (A) {
         	 A.speechrecognition.showPopMessage();
          });
 
-        A.speechrecognition.upgrate = function () {
+        A.speechrecognition.upgrade = function () {
         	 start_button.style.visibility = 'hidden';
         };
 
