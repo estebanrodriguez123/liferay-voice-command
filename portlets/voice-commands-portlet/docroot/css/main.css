@@ -1,0 +1,15 @@
+.command-key-column {
+	width: 30%;
+}
+
+.command-value-column {
+	width: 50%;
+}
+
+.action-column {
+	width: 20%;
+}
+
+.break-text {
+	word-break: break-all;
+}
