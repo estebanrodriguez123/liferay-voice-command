@@ -19,7 +19,6 @@ package com.rivetlogic.speech.portlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +39,11 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.rivetlogic.speech.bean.CommandBean;
 import com.rivetlogic.speech.bean.impl.CommandBeanImpl;
+import com.rivetlogic.speech.util.SpeechConstants;
+import com.rivetlogic.speech.util.SpeechUtil;
 
 public class SpeechPortlet extends MVCPortlet {
 
@@ -61,12 +57,12 @@ public class SpeechPortlet extends MVCPortlet {
         Map<String, String[]> preferenceMap = preference.getMap();
         for (Map.Entry<String, String[]> entry : preferenceMap.entrySet()) {
             key = entry.getKey().trim();
-            if (!key.isEmpty() && !key.equalsIgnoreCase(KEY_WORD)) {
+            if (!key.isEmpty() && !key.equalsIgnoreCase(SpeechConstants.KEY_PHRASE)) {
                 commandBeans.add(new CommandBeanImpl(entry.getKey(), entry.getValue()[0]));
             }
         }
-        request.setAttribute(COMMAND_COUNT, commandBeans.size());
-        request.setAttribute(COMMAND_LIST, commandBeans);
+        request.setAttribute(SpeechConstants.VOICE_COMMAND_COUNT, commandBeans.size());
+        request.setAttribute(SpeechConstants.VOICE_COMMAND_LIST, commandBeans);
         SessionMessages.clear(request);
         super.doView(request, response);
     }
@@ -74,19 +70,24 @@ public class SpeechPortlet extends MVCPortlet {
     /**
      * Action to add new speech command and its value.
      *
-     * @param request
-     *            ActionRequest
-     * @param response
-     *            ActionResponse
+     * @param request ActionRequest
+     * @param response ActionResponse
      * @throws PortalException
      * @throws SystemException
      */
     public void addCommandAction(ActionRequest request, ActionResponse response) throws PortalException,
             SystemException {
-        PortletPreferences preference = request.getPreferences();
+        PortletPreferences preference;
         try {
-            preference.setValue(KEY_WORD, ParamUtil.getString(request, KEY_WORD));
-            preference.setValue(ParamUtil.getString(request, COMMAND_KEY), ParamUtil.getString(request, COMMAND_VALUE));
+            String voiceCommand = ParamUtil.getString(request, SpeechConstants.DELETE_VOICE_COMMAND);
+            if(voiceCommand != null && !voiceCommand.trim().isEmpty()) {
+                preference = SpeechUtil.deleteVoiceCommand(request, voiceCommand);
+            } else {
+                preference = request.getPreferences();
+            }
+            preference.setValue(SpeechConstants.KEY_PHRASE, ParamUtil.getString(request, SpeechConstants.KEY_PHRASE));
+            preference.setValue(ParamUtil.getString(request, SpeechConstants.VOICE_COMMAND), 
+                    ParamUtil.getString(request, SpeechConstants.VOICE_COMMAND_VALUE));
             preference.store();
 
             SessionMessages.add(request, SESSION_MESSAGE_SUCCESS);
@@ -100,7 +101,7 @@ public class SpeechPortlet extends MVCPortlet {
     }
 
     /**
-     * Return view page
+     * Return view page.
      *
      * @param request
      * @param response
@@ -108,34 +109,25 @@ public class SpeechPortlet extends MVCPortlet {
      * @throws SystemException
      * @throws PortletModeException
      */
-    public void backAction(ActionRequest request, ActionResponse response) throws PortalException, SystemException,
+    public void backAction(ActionRequest request, ActionResponse response) 
+            throws PortalException, SystemException,
             PortletModeException {
         response.setPortletMode(PortletMode.VIEW);
     }
 
-    public void deleteAction(ActionRequest request, ActionResponse response) throws PortalException, SystemException,
+    /**
+     * Delete a voice command.
+     * @param request ActionRequest
+     * @param response ActionResponse
+     * @throws PortalException
+     * @throws SystemException
+     * @throws PortletModeException
+     */
+    public void deleteAction(ActionRequest request, ActionResponse response) 
+            throws PortalException, SystemException,
             PortletModeException {
-        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-        long plid = themeDisplay.getLayout().getPlid();
-        long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
-        int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
-        long companyId = themeDisplay.getCompanyId();
-
-        String commandKey = ParamUtil.get(request, COMMAND_KEY, StringPool.BLANK);
-
-        PortletPreferences preference = request.getPreferences();
-        Map<String, String[]> preferencesMap = new HashMap<String, String[]>(preference.getMap());
-        preferencesMap.remove(commandKey);
-
-        PortletPreferencesLocalServiceUtil.deletePortletPreferences(ownerId, ownerType, plid, PORTLET_NAMESPACE);
-
-        preference = PortletPreferencesLocalServiceUtil.getPreferences(companyId, ownerId, ownerType, plid,
-                PORTLET_NAMESPACE);
         try {
-            for (Map.Entry<String, String[]> entry : preferencesMap.entrySet()) {
-                preference.setValue(entry.getKey(), entry.getValue()[0]);
-            }
-            preference.store();
+            SpeechUtil.deleteVoiceCommand(request);
         } catch (ReadOnlyException e) {
             _log.error(e);
         } catch (ValidatorException e) {
@@ -146,12 +138,6 @@ public class SpeechPortlet extends MVCPortlet {
     }
 
     private static final Log _log = LogFactoryUtil.getLog(SpeechPortlet.class);
-    private static final String PORTLET_NAMESPACE = "voicecommands_WAR_voicecommandsportlet";
-    private static final String KEY_WORD = "key_word";
-    private static final String COMMAND_COUNT = "command_count";
-    private static final String COMMAND_LIST = "command_list";
-    private static final String COMMAND_KEY = "command_key";
-    private static final String COMMAND_VALUE = "command_value";
 
     private static final String SESSION_MESSAGE_SUCCESS = "rivet_speech_success_msg";
 }
