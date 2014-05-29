@@ -17,20 +17,13 @@
 
 package com.rivetlogic.speech.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.liferay.portal.kernel.util.ListUtil;
-import com.rivetlogic.speech.bean.CommandBean;
-
-public class SpeechUtil {
-    public static List<CommandBean> subList(List<CommandBean> list, Integer start, Integer end) {
-        if (list != null) {
-            return ListUtil.subList(list, start, end);
-        } else {
-            return new ArrayList<CommandBean>();
-        }
-    }
-    
+public class SpeechConstants {
+    public static final String PORTLET_NAMESPACE = "voicecommands_WAR_voicecommandsportlet";
+    public static final String KEY_PHRASE = "key_phrase";
+    public static final String VOICE_COMMAND_COUNT = "voice_command_count";
+    public static final String VOICE_COMMAND_LIST = "voice_command_list";
+    public static final String VOICE_COMMAND = "voice_command";
+    public static final String DELETE_VOICE_COMMAND = "delete_voice_command"; 
+    public static final String VOICE_COMMAND_VALUE = "voice_command_value";
     public static final int NUMBER_OF_ROWS = 10;
 }

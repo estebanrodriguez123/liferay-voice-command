@@ -195,7 +195,7 @@ AUI().add('speechrecognition', function (A) {
             var keyWordLength = keyWord.length;
             var indexOf = speechCommand.indexOf(keyWord);
 
-            if (indexOf > -1) {
+            if (indexOf > -1 && keyWordLength > 0) {
                 speechCommand = speechCommand.substring((keyWordLength + 1), speechCommand.length);
                 speechCommand = speechCommand.trim();
             }

@@ -34,7 +34,7 @@
 <%
 	String key;
 	String keyWord = "";
-	String KEY_WORD = "key_word";
+	String KEY_WORD = "key_phrase";
 	String jsResultMap = "{";
 	String jsResultArray = "[";
 	long plidCP = 0;
