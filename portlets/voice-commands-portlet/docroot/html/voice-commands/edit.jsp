@@ -16,14 +16,15 @@
  */
 --%>
 
+<%@page import="com.rivetlogic.speech.util.SpeechConstants"%>
 <%@include file="init.jsp" %>
 <%
 boolean edit = false;
 PortletPreferences preference = renderRequest.getPreferences();
-String keyWord = preference.getValue("key_word", StringPool.BLANK);
+String keyWord = preference.getValue(SpeechConstants.KEY_PHRASE, StringPool.BLANK);
 
-String commandKey = ParamUtil.getString(request, "voice_command", StringPool.BLANK);
-String commandValue = ParamUtil.getString(request, "voice_command_value", StringPool.BLANK);
+String commandKey = ParamUtil.getString(request, SpeechConstants.VOICE_COMMAND, StringPool.BLANK);
+String commandValue = ParamUtil.getString(request, SpeechConstants.VOICE_COMMAND_VALUE, StringPool.BLANK);
 
 if(commandKey != null && !commandKey.trim().isEmpty()) {
     edit = true;

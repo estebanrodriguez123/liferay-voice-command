@@ -22,7 +22,7 @@
 <%@page import="com.rivetlogic.speech.util.SpeechUtil"%>
 <%@include file="init.jsp" %>
 <%
-	List<CommandBean> commandBeans = (List<CommandBean>) request.getAttribute("voice_command_list");
+	List<CommandBean> commandBeans = (List<CommandBean>) request.getAttribute(SpeechConstants.VOICE_COMMAND_LIST);
 %>
 
 <portlet:renderURL var="addCommandURL" portletMode="edit">
