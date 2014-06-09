@@ -101,21 +101,6 @@ public class SpeechPortlet extends MVCPortlet {
     }
 
     /**
-     * Return view page.
-     *
-     * @param request
-     * @param response
-     * @throws PortalException
-     * @throws SystemException
-     * @throws PortletModeException
-     */
-    public void backAction(ActionRequest request, ActionResponse response) 
-            throws PortalException, SystemException,
-            PortletModeException {
-        response.setPortletMode(PortletMode.VIEW);
-    }
-
-    /**
      * Delete a voice command.
      * @param request ActionRequest
      * @param response ActionResponse

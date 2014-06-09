@@ -16,6 +16,8 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.rivetlogic.speech.util.SpeechConstants"%>
 <%@page import="com.rivetlogic.speech.bean.CommandBean"%>
 <%@page import="java.util.List"%>
@@ -25,9 +27,9 @@
 	List<CommandBean> commandBeans = (List<CommandBean>) request.getAttribute(SpeechConstants.VOICE_COMMAND_LIST);
 %>
 
-<portlet:renderURL var="addCommandURL" portletMode="edit">
-    <portlet:param name="mvcPath" value="/html/voice-commands/edit.jsp" />
-</portlet:renderURL>
+<portlet:actionURL var="addCommandURL" portletMode="<%= LiferayPortletMode.EDIT.toString() %>" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+    <portlet:param name="jspPage" value="/html/voice-commands/edit.jsp" />
+</portlet:actionURL>
 <aui:fieldset label="voice-command-list">
 	<aui:fieldset>
 		<aui:button type="button" value="&nbsp;Add" cssClass="btn btn-large  btn-primary icon-plus" onClick="<%= addCommandURL %>"/>
