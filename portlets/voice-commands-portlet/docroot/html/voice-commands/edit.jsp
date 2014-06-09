@@ -16,6 +16,8 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
 <%@page import="com.rivetlogic.speech.util.SpeechConstants"%>
 <%@include file="init.jsp" %>
 <%
@@ -37,7 +39,9 @@ if(commandKey != null && !commandKey.trim().isEmpty()) {
 <portlet:actionURL name="addCommandAction" var="addCommandURL">
 	<portlet:param name="delete_voice_command" value="<%= commandKey %>"/>
 </portlet:actionURL>
-<portlet:actionURL name="backAction" var="backURL"/>
+<portlet:actionURL var="backURL" portletMode="<%= LiferayPortletMode.VIEW.toString() %>" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+	<portlet:param name="jspPage" value="/html/voice-commands/view.jsp" />
+</portlet:actionURL>
 <!-- FORM -->
 <aui:form action="${addCommandURL}">
 	<aui:fieldset column="true" label='<%= edit ? "edit-command" : "add-command" %>'>
@@ -56,7 +60,7 @@ if(commandKey != null && !commandKey.trim().isEmpty()) {
 		</aui:fieldset>
 	</aui:fieldset>
 	<aui:button-row>
-		<aui:button type="button" value="Back" onClick="${backURL}"/>
+		<aui:button type="cancel" value="Back" onClick="${backURL}"/>
 		<aui:button type="submit" value='<%= edit ? "update-button" : "add-button" %>'/>
 	</aui:button-row>
 </aui:form>
