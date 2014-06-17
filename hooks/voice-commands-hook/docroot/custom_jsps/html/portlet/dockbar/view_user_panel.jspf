@@ -116,7 +116,11 @@
 				keyWord: '<%= keyWord %>',
 				userSetupComplete: <%= userSetupComplete %>
 			});
-		A.one('.speech :button').on('click', A.speechrecognition.startButton);
+			
+		var speechButton = A.one('.speech :button');
+		if(speechButton) {
+			speechButton.on('click', A.speechrecognition.startButton);
+		}
 	}
 </aui:script>
 
