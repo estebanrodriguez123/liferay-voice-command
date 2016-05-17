@@ -13,4 +13,4 @@
  * details.
  */
 --%>
-<script type="text/javascript" src="/html/js/speech.js"></script>
+<script type="text/javascript" src="/html/js/speech.js?t=2016-2"></script>

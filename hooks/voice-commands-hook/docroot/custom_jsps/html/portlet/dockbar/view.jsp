@@ -221,10 +221,10 @@
 </aui:nav-bar>
 	<!-- BEGIN RIVET LOGIC CODE -->
 	<c:if test="<%= !layout.getGroup().isControlPanel() && themeDisplay.isSignedIn() %>">
-		<div id="results" class="results">
+		<div id="speechresults" class="speechresults">
 	</c:if>
 	<c:if test="<%= layout.getGroup().isControlPanel() && themeDisplay.isSignedIn() %>">
-		<div id="results" class="results2">
+		<div id="speechresults" class="speechresults-cpanel">
 	</c:if>
 		<span id="final_span" class="final"></span>
 		<span id="interim_span" class="interim"></span>
