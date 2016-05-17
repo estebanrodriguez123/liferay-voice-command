@@ -92,7 +92,7 @@
 		<!-- BEGIN RIVET LOGIC CODE -->
 		<aui:nav-item cssClass="speech" dropdown="<%= false %>" id="speech" label="">
 			<button id="start_button">
-				<img id="start_img" src="/voice-commands-hook/image/mic.gif" alt="Start" width="43px">
+				<img id="start_img" class="inactive" src="/voice-commands-hook/image/mic.gif" alt="Start" width="43px">
 			</button>
 		</aui:nav-item>
 		<!-- END RIVET LOGIC CODE -->
@@ -114,7 +114,10 @@
 				commandsMap: <%= jsResultMap %>,
 				commandsKey: <%= jsResultArray %>,
 				keyWord: '<%= keyWord %>',
-				userSetupComplete: <%= userSetupComplete %>
+				userSetupComplete: <%= userSetupComplete %>,
+				urlParamOptions: {
+					screenName: '<%= user.getScreenName() %>'
+				}
 			});
 			
 		var speechButton = A.one('.speech :button');
@@ -142,7 +145,7 @@
   .interim {
     color: gray;
   }
-  .results {
+  .speechresults {
     font-size: 12px;
     font-weight: bold;
     border: 1px solid #ddd;
@@ -152,10 +155,10 @@
     width: 362px;
     height: 20px;
     float: right;
-    margin-top: 45px;
+    /*margin-top: 45px;*/
     margin-right: 70px;
   }
-  .results2 {
+  .speechresults-cpanel {
     font-size: 12px;
     font-weight: bold;
     border: 1px solid #ddd;
@@ -166,7 +169,7 @@
     height: 20px;
     float: right;
   }
-  #results {
-       opacity: 0;
+  #speechresults {
+    opacity: 0;
   }
 </style>
