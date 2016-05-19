@@ -128,15 +128,15 @@
 </aui:script>
 
 <style>
-  .aui button {
+  .speech button {
     background-image: linear-gradient(#118ade 0,#118ade 47%,#1273c7 100%);
     background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#118ade),color-stop(47%,#118ade),color-stop(100%,#1273c7));
     border: 0px;
     color: #fff;
     padding: 0px;
   }
-  .aui button :hover {
-    background: #2aaae6!important;
+  .speech button :hover {
+    background: #2aaae6;
   }
   .final {
     color: black;
